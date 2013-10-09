@@ -1,0 +1,30 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- Beans Declaration -->	
+	<bean id="userCacheService" class="org.data4j.cache.srv.UserCacheService" init-method="initialize"/>
+	
+	<bean id="rmiUserService" class="org.data4j.rmi.server.RMIUserService" >
+ 		<property name="userCacheService" ref="userCacheService"/>
+	</bean>
+	
+	<!-- RMI Server Declaration -->
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+    	
+    	<!-- serviceName represents RMI Service Name -->
+        <property name="serviceName" value="rmiUserService"/>
+        
+        <!-- service represents RMI Object(RMI Service Impl) -->
+        <property name="service" ref="rmiUserService"/>
+        
+        <!-- serviceInterface represents RMI Service Interface exposed -->
+        <property name="serviceInterface" value="org.data4j.rmi.server.IRMIUserService"/>
+        
+        <!-- defaults to 1099 -->
+    	<property name="registryPort" value="1099"/>
+    
+    </bean>
+	
+</beans>
